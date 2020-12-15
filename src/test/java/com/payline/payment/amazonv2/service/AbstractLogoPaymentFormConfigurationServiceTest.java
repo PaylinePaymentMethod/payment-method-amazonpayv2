@@ -22,12 +22,12 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 
-class LogoPaymentFormConfigurationServiceTest {
+class AbstractLogoPaymentFormConfigurationServiceTest {
 
     /**
-     * Private class used to test abstract class {@link LogoPaymentFormConfigurationService}.
+     * Private class used to test abstract class {@link AbstractLogoPaymentFormConfigurationService}.
      */
-    private static class TestService extends LogoPaymentFormConfigurationService {
+    private static class TestService extends AbstractLogoPaymentFormConfigurationService {
         @Override
         public PaymentFormConfigurationResponse getPaymentFormConfiguration(PaymentFormConfigurationRequest paymentFormConfigurationRequest) {
             return null;

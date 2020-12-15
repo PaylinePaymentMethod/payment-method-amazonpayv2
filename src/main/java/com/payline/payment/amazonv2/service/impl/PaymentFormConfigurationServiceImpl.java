@@ -2,7 +2,7 @@ package com.payline.payment.amazonv2.service.impl;
 
 import com.payline.payment.amazonv2.bean.Script;
 import com.payline.payment.amazonv2.exception.PluginException;
-import com.payline.payment.amazonv2.service.LogoPaymentFormConfigurationService;
+import com.payline.payment.amazonv2.service.AbstractLogoPaymentFormConfigurationService;
 import com.payline.payment.amazonv2.utils.JsonService;
 import com.payline.payment.amazonv2.utils.constant.PartnerConfigurationKeys;
 import com.payline.payment.amazonv2.utils.form.FormUtils;
@@ -21,7 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 @Log4j2
-public class PaymentFormConfigurationServiceImpl extends LogoPaymentFormConfigurationService {
+public class PaymentFormConfigurationServiceImpl extends AbstractLogoPaymentFormConfigurationService {
     public static final String FAILURE_TRANSACTION_ID = "NO TRANSACTION YET";
 
 

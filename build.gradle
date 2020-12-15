@@ -43,9 +43,28 @@ dependencies {
     testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-support', version: seleniumVersion
 }
 
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Built-By': System.getProperty('user.name'),
+                'Built-JDK': System.getProperty('java.version'),
+                'Build-Date': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'Source-Compatibility': project.sourceCompatibility,
+                'Target-Compatibility': project.targetCompatibility
+        )
+    }
+}
+
 test {
     useJUnitPlatform()
     exclude('**/*IT.class')
+}
+
+dependencyCheck {
+    format 'ALL'
+    skipConfigurations = ['jacocoAgent', 'jacocoAnt', 'annotationProcessor', 'axisGenAntTask', 'jaxws', 'execJar', 'jaxb', 'generateSources']
 }
 
 jacocoTestReport {

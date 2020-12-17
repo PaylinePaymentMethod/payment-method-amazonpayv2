@@ -16,6 +16,11 @@ targetCompatibility = 1.8
 
 compileJava.options.encoding = 'UTF-8'
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.incremental = true  // Pour accélerer la compilation
+}
+
 def externalFileName = "$projectDir/.external"
 if (file(externalFileName).exists()) {
     apply from: "external.gradle"

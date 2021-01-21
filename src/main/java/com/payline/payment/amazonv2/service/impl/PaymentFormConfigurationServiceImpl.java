@@ -1,101 +1,51 @@
 package com.payline.payment.amazonv2.service.impl;
 
-import com.payline.payment.amazonv2.bean.Script;
-import com.payline.payment.amazonv2.exception.PluginException;
+import com.payline.payment.amazonv2.bean.CheckoutSession;
 import com.payline.payment.amazonv2.service.AbstractLogoPaymentFormConfigurationService;
-import com.payline.payment.amazonv2.utils.JsonService;
-import com.payline.payment.amazonv2.utils.constant.PartnerConfigurationKeys;
+import com.payline.payment.amazonv2.utils.amazon.ClientUtils;
+import com.payline.payment.amazonv2.utils.constant.RequestContextKeys;
 import com.payline.payment.amazonv2.utils.form.FormUtils;
-import com.payline.pmapi.bean.common.FailureCause;
-import com.payline.pmapi.bean.paymentform.bean.form.PartnerWidgetForm;
-import com.payline.pmapi.bean.paymentform.bean.form.partnerwidget.PartnerWidgetOnPay;
-import com.payline.pmapi.bean.paymentform.bean.form.partnerwidget.PartnerWidgetOnPayCallBack;
-import com.payline.pmapi.bean.paymentform.bean.form.partnerwidget.PartnerWidgetScriptImport;
+import com.payline.pmapi.bean.paymentform.bean.form.NoFieldForm;
 import com.payline.pmapi.bean.paymentform.request.PaymentFormConfigurationRequest;
 import com.payline.pmapi.bean.paymentform.response.configuration.PaymentFormConfigurationResponse;
-import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseFailure;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
 import lombok.extern.log4j.Log4j2;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Locale;
 @Log4j2
 public class PaymentFormConfigurationServiceImpl extends AbstractLogoPaymentFormConfigurationService {
-    public static final String FAILURE_TRANSACTION_ID = "NO TRANSACTION YET";
+    private final FormUtils formUtils = FormUtils.getInstance();
 
+    public static final String NOFIELDFORM_BUTTON_TEXT = "form.button.amazonPay.text";
+    public static final String NOFIELDFORM_BUTTON_DESCRIPTION = "form.button.amazonPay.description";
 
-    private final JsonService jsonService = JsonService.getInstance();
-    private FormUtils formUtils = FormUtils.getInstance();
+    private ClientUtils client = ClientUtils.getInstance();
 
     @Override
-    public PaymentFormConfigurationResponse getPaymentFormConfiguration(PaymentFormConfigurationRequest request) {
-        Locale locale = request.getLocale();
-        PaymentFormConfigurationResponse pfcResponse;
+    public PaymentFormConfigurationResponse getPaymentFormConfiguration(final PaymentFormConfigurationRequest request) {
 
-        try {
-            String description = i18n.getMessage("widget.description", locale);
+        final PaymentFormConfigurationResponse paymentFormConfigurationResponse;
+        final String step = request.getRequestContext() != null && request.getRequestContext().getRequestData() != null ?
+                request.getRequestContext().getRequestData().get(RequestContextKeys.STEP) : null;
 
-            URL url = new URL(request.getPartnerConfiguration().getProperty(PartnerConfigurationKeys.AMAZON_SCRIPT_URL) );
-            PartnerWidgetScriptImport scriptImport = PartnerWidgetScriptImport.WidgetPartnerScriptImportBuilder
-                    .aWidgetPartnerScriptImport()
-                    .withAsync(false)
-                    .withCache(false)
-                    .withUrl(url)
+        if (RequestContextKeys.STEP_COMPLETE.equalsIgnoreCase(step)) {
+            final String checkoutSessionId = request.getRequestContext().getRequestData().get(RequestContextKeys.CHECKOUT_SESSION_ID);
+            final CheckoutSession session = client.getCheckoutSession(checkoutSessionId);
+            paymentFormConfigurationResponse = formUtils.createPaymentInfoDisplayForm(session, request);
+        } else {
+            final NoFieldForm noFieldForm = NoFieldForm.NoFieldFormBuilder
+                    .aNoFieldForm()
+                    .withDisplayButton(true)
+                    .withButtonText(i18n.getMessage(NOFIELDFORM_BUTTON_TEXT, request.getLocale()))
+                    .withDescription(i18n.getMessage(NOFIELDFORM_BUTTON_DESCRIPTION, request.getLocale()))
                     .build();
-
-            Script script = formUtils.createScript(request);
-
-            // create an unused but mandatory PartnerWidgetOnPay
-            PartnerWidgetOnPay onPay = PartnerWidgetOnPayCallBack.WidgetContainerOnPayCallBackBuilder
-                    .aWidgetContainerOnPayCallBack()
-                    .withName("unused")
-                    .build();
-
-            String scriptAfterImport = "amazon.Pay.renderButton('#AmazonPayButton', " + jsonService.toJson(script) + ")";
-            PartnerWidgetForm form = PartnerWidgetForm.WidgetPartnerFormBuilder
-                    .aWidgetPartnerForm()
-                    .withDescription(description)
-                    .withDisplayButton(false)
-                    .withScriptImport(scriptImport)
-                    .withLoadingScriptAfterImport(scriptAfterImport)
-                    .withOnPay(onPay)    // useless as the script directly redirect the buyer but mandatory by the API (shall not be null)
-                    .withPerformsAutomaticRedirection(true)
-                    .build();
-
-            pfcResponse = PaymentFormConfigurationResponseSpecific.PaymentFormConfigurationResponseSpecificBuilder
+            paymentFormConfigurationResponse = PaymentFormConfigurationResponseSpecific.PaymentFormConfigurationResponseSpecificBuilder
                     .aPaymentFormConfigurationResponseSpecific()
-                    .withPaymentForm(form)
-                    .build();
-
-
-        } catch (MalformedURLException e) {
-            String errorMessage = "Unable convert Amazon script url into an URL object";
-            log.error(errorMessage, e);
-
-            pfcResponse = PaymentFormConfigurationResponseFailure.PaymentFormConfigurationResponseFailureBuilder
-                    .aPaymentFormConfigurationResponseFailure()
-                    .withPartnerTransactionId(FAILURE_TRANSACTION_ID)
-                    .withErrorCode(errorMessage)
-                    .withFailureCause(FailureCause.INVALID_DATA)
-                    .build();
-        } catch (PluginException e) {
-            log.info("unable to execute PaymentFormConfigurationServiceImpl#getPaymentFormConfiguration", e);
-            pfcResponse = PaymentFormConfigurationResponseFailure.PaymentFormConfigurationResponseFailureBuilder
-                    .aPaymentFormConfigurationResponseFailure()
-                    .withPartnerTransactionId(FAILURE_TRANSACTION_ID)
-                    .withErrorCode(e.getMessage())
-                    .withFailureCause(e.getFailureCause())
-                    .build();
-        }catch (RuntimeException e) {
-            pfcResponse = PaymentFormConfigurationResponseFailure.PaymentFormConfigurationResponseFailureBuilder
-                    .aPaymentFormConfigurationResponseFailure()
-                    .withPartnerTransactionId(FAILURE_TRANSACTION_ID)
-                    .withErrorCode(e.getMessage())
-                    .withFailureCause(FailureCause.INTERNAL_ERROR)
+                    .withPaymentForm(noFieldForm)
                     .build();
         }
 
-        return pfcResponse;
+        return paymentFormConfigurationResponse;
+
     }
+
 }

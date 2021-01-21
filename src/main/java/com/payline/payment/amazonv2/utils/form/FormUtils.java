@@ -12,7 +12,7 @@ import com.payline.payment.amazonv2.utils.constant.ContractConfigurationKeys;
 import com.payline.payment.amazonv2.utils.constant.PartnerConfigurationKeys;
 import com.payline.payment.amazonv2.utils.i18n.I18nService;
 import com.payline.pmapi.bean.common.Amount;
-import com.payline.pmapi.bean.payment.request.RedirectionPaymentRequest;
+import com.payline.pmapi.bean.payment.request.PaymentRequest;
 import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormDisplayFieldText;
 import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormField;
 import com.payline.pmapi.bean.paymentform.bean.form.CustomForm;
@@ -54,7 +54,7 @@ public class FormUtils {
      * @param request Payline request used to fill data in the script
      * @return the script to load
      */
-    public Script createScript(PaymentFormConfigurationRequest request) {
+    public Script createScript(PaymentRequest request) {
         RequestConfiguration configuration = RequestConfigurationService.getInstance().build(request);
 
         CheckoutSession session = CheckoutSession.builder()
@@ -85,8 +85,7 @@ public class FormUtils {
                 .build();
     }
 
-
-    public PaymentFormConfigurationResponse createPaymentInfoDisplayForm(CheckoutSession session, RedirectionPaymentRequest request) {
+    public PaymentFormConfigurationResponse createPaymentInfoDisplayForm(CheckoutSession session, PaymentFormConfigurationRequest request) {
         Locale locale = request.getLocale();
         Amount amount = request.getAmount();
         List<PaymentFormField> customFields = new ArrayList<>();

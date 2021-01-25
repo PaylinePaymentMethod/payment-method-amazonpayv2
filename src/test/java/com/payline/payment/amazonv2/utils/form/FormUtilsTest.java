@@ -37,11 +37,11 @@ class FormUtilsTest {
         String signature = "this is a signature";
         Mockito.doReturn(signature).when(signatureUtils).generateSignature(any());
 
-        Script script = formUtils.createScript(MockUtils.aPaymentFormConfigurationRequest());
+        Script script = formUtils.createScript(MockUtils.aPaylinePaymentRequest());
 
         // assertions on script values
         Assertions.assertEquals(ButtonColor.Gold, script.getButtonColor());
-        Assertions.assertEquals("fr_FR", script.getCheckoutLanguage());
+        Assertions.assertEquals("en_GB", script.getCheckoutLanguage());
         Assertions.assertEquals("EUR", script.getLedgerCurrency());
         Assertions.assertEquals("123123", script.getMerchantId());
         Assertions.assertEquals(Placement.Cart, script.getPlacement());

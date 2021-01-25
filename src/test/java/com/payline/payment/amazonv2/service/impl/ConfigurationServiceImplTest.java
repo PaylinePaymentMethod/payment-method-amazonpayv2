@@ -1,5 +1,8 @@
 package com.payline.payment.amazonv2.service.impl;
 
+import com.amazon.pay.api.PayConfiguration;
+import com.amazon.pay.api.types.Environment;
+import com.amazon.pay.api.types.Region;
 import com.payline.payment.amazonv2.MockUtils;
 import com.payline.payment.amazonv2.exception.InvalidDataException;
 import com.payline.payment.amazonv2.utils.amazon.ClientUtils;

@@ -12,7 +12,6 @@ import com.payline.payment.amazonv2.utils.PluginUtils;
 import com.payline.payment.amazonv2.utils.amazon.ClientUtils;
 import com.payline.payment.amazonv2.utils.amazon.ReasonCodeConverter;
 import com.payline.payment.amazonv2.utils.constant.RequestContextKeys;
-import com.payline.payment.amazonv2.utils.form.FormUtils;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.bean.payment.RequestContext;
 import com.payline.pmapi.bean.payment.request.RedirectionPaymentRequest;
@@ -24,6 +23,8 @@ import com.payline.pmapi.bean.payment.response.buyerpaymentidentifier.impl.Empty
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFormUpdated;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseSuccess;
+import com.payline.pmapi.bean.paymentform.bean.form.NoFieldForm;
+import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
 import com.payline.pmapi.service.PaymentWithRedirectionService;
 import lombok.extern.log4j.Log4j2;
 
@@ -35,7 +36,6 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
 
 
     private ClientUtils client = ClientUtils.getInstance();
-    FormUtils formUtils = FormUtils.getInstance();
 
     @Override
     public PaymentResponse finalizeRedirectionPayment(RedirectionPaymentRequest request) {
@@ -96,25 +96,35 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
         RequestConfiguration configuration = RequestConfigurationService.getInstance().build(request);
 
         // get the checkoutSessionId
-        String amazonCheckoutSessionId = "AmazonCheckoutSessionId";
+        String amazonCheckoutSessionId = "amazonCheckoutSessionId";
         String checkoutSessionId = request.getHttpRequestParametersMap().get(amazonCheckoutSessionId)[0];
 
         // get the checkoutSession
         client.init(configuration);
-        CheckoutSession session = client.getCheckoutSession(checkoutSessionId);
 
         // return a confirm form
-        Map<String, String> requestData = new HashMap<>();
+        final Map<String, String> requestData = new HashMap<>();
         requestData.put(RequestContextKeys.CHECKOUT_SESSION_ID, checkoutSessionId);
-        requestData.put(RequestContextKeys.EMAIL, session.getBuyer().getEmail());
+        requestData.put(RequestContextKeys.STEP, RequestContextKeys.STEP_COMPLETE);
+
         RequestContext context = RequestContext.RequestContextBuilder
                 .aRequestContext()
                 .withRequestData(requestData)
                 .build();
 
+        //Fake form will not be display
+        final NoFieldForm noFieldForm = NoFieldForm.NoFieldFormBuilder.aNoFieldForm()
+                .withButtonText("texte")
+                .withDescription("description")
+                .withDisplayButton(true)
+                .build();
+
         return PaymentResponseFormUpdated.PaymentResponseFormUpdatedBuilder
                 .aPaymentResponseFormUpdated()
-                .withPaymentFormConfigurationResponse(formUtils.createPaymentInfoDisplayForm(session, request))
+                .withPaymentFormConfigurationResponse(PaymentFormConfigurationResponseSpecific.
+                        PaymentFormConfigurationResponseSpecificBuilder.
+                        aPaymentFormConfigurationResponseSpecific()
+                        .withPaymentForm(noFieldForm).build())
                 .withRequestContext(context)
                 .build();
     }
@@ -168,7 +178,6 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
                     .withTransactionDetails(transactionDetails)
                     .build();
         }
-
         return response;
     }
 

@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 @Log4j2
-public abstract class LogoPaymentFormConfigurationService implements PaymentFormConfigurationService {
+public abstract class AbstractLogoPaymentFormConfigurationService implements PaymentFormConfigurationService {
 
     protected I18nService i18n = I18nService.getInstance();
     protected ConfigProperties config = ConfigProperties.getInstance();

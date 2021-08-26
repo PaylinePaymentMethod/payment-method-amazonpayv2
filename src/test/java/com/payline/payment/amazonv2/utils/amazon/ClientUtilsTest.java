@@ -35,7 +35,7 @@ class ClientUtilsTest {
     CheckoutSession expectedSession = CheckoutSession.builder()
             .checkoutSessionId(checkoutSessionId)
             .platformId(platformId)
-            .releaseEnvironment(AmazonBean.ReleaseEnvironment.SANDBOX).build();
+            .releaseEnvironment(AmazonBean.ReleaseEnvironment.Sandbox).build();
 
     @BeforeEach
     void setUp() {

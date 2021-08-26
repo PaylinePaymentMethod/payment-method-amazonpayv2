@@ -16,6 +16,6 @@ public class AmazonBean {
 
 
     public enum ReleaseEnvironment {
-        Sandbox, Live
+        SANDBOX, LIVE
     }
 }

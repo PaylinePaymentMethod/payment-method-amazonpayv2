@@ -8,6 +8,6 @@ public class AddressRestrictions {
     private String restrictions;
 
     public enum Type {
-        Allowed, NotAllowed
+        ALLOWED, NOT_ALLOWED
     }
 }

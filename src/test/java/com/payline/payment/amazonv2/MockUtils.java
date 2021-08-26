@@ -46,13 +46,35 @@ public class MockUtils {
         partnerConfigurationMap.put(PartnerConfigurationKeys.PLACEMENT, Placement.Cart.name());
 
         Map<String, String> sensitiveConfigurationMap = new HashMap<>();
-        sensitiveConfigurationMap.put(PartnerConfigurationKeys.PRIVATE_KEY, "-----BEGIN PRIVATE KEY-----\n" +
-                "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC73EuiXbAXb2Jl\n" +
-                "/cf8ZUvOcNz8bqHdyPPAEXtM1VL6UB4CHDshMz6KtIrjJtXXuXcg1+Owi7qtxcym\n" +
-                "DueDVXNQWmWoP3MHEVBInvKy/13xdiBmfeIzRvfmTg329tTgxo7m8MGyr2iK8Zjs\n" +
-                "K6ZenqU8eOFWYiQ8UrRxsA==\n" +
-                "-----END PRIVATE KEY-----");
-
+        sensitiveConfigurationMap.put(PartnerConfigurationKeys.PRIVATE_KEY,
+                "-----BEGIN PRIVATE KEY-----\n" +
+                        "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC73EuiXbAXb2Jl\n" +
+                        "/cf8ZUvOcNz8bqHdyPPAEXtM1VL6UB4CHDshMz6KtIrjJtXXuXcg1+Owi7qtxcym\n" +
+                        "vTyaZ1dN/u9fLbaLGX8uk5hb7bN6benczI0To8tArDfY45GtXICuOjrU6B5gXWeZ\n" +
+                        "tf4s4yJs2DC/WfhASYkAwp2IEwT53q2Fny7TZ+e4ptp2O5bq7IqeaRKVWHnAVDd4\n" +
+                        "3ptJmnqqegbQ1ItEkcgciDSSyffDHC0gSWJf2BOCip4cneJ0zeN+5VlYrCn9Vvl8\n" +
+                        "WfEEu4XQ/SgR4/FDR+3JNUlWNwZ6+f6mcy/LB6VNOndfgmAYQw8TNYdnuQIInNr5\n" +
+                        "6hZeoDqHAgMBAAECggEAGtjy3jNxdQfwEg9gw0teuBQdIN5Wt7F+VFarPmHGSAun\n" +
+                        "HjoWoToHmB8RMkFckkXpJoJ0AckWVrtL8hBdVtup+HWUlA+eZOax7GAfiBPCcJ7A\n" +
+                        "q1N4XfQsmgOCv7ZWHWZ45W1g9whtPuxaX/dIafXT96Y14ULkXZukvr0Rcl71eRgB\n" +
+                        "F9f6PWolm1WhRDuMjHsWMMebAyaTizeoFnsOs1DGimDCfUQE8kVjlBFQhGnwKX2k\n" +
+                        "svLpFmlSIykx2fR/ur63UiWdWlI7tsqyFq/86QKBpHd6elknw09B+teWoggEtpi+\n" +
+                        "lJ6Dt2hMCZlIApa4m6/vPdDNcQf8sToWG5oU5MAEsQKBgQDe1pbmUEvvNlKYcxHr\n" +
+                        "Qr8Ss8ykfw4IdjlHtDyoXHTVX4/PTKukaqKlVmUtt7Pf4Htm3tiiEb2TxXRjxThm\n" +
+                        "owzFpd9FgGqDFIEYlerY2K2CiKB5tq4sSw3CI9rIVuAl2fVeFLdZ0Nz+xItc14Kg\n" +
+                        "0q0VYVN8pg6S6kzUMkNB2JXkywKBgQDX0StSXlz+wVMz6Y6P8MildOvPexsVPOXg\n" +
+                        "BUVeD6fPFJihuzHAd8zBUdaWhmWByd6mpIFsW2BKzxcTK1OB2m8dtv78ER7GNHtT\n" +
+                        "7xGuec4zMq8JYS27AfwI7i4hLbubL8Ps5m+RX64/DexXDMMlDGP8RV7BSkqOypkU\n" +
+                        "BH1TRViFtQKBgGvTqnEHqba2soDSLXmJcqu6FOwEDuZJTq5DqJZPJrmY5B2LHAMT\n" +
+                        "FmCqzYqxuXg7R3sfmfPSYcl/YjJk3EXN4ABDoyYeXWvQICelY15KeqsPMZezrdQA\n" +
+                        "/UdT0ine39dxACnmHFJ5nnYo5MaoAa2QQ/B0h9FpCOROO57yM1lJVD7BAoGARrVh\n" +
+                        "XDtOfKkaeYesDbz2AD+uguvyk6LALgWMFKVMdaxp1ZNfWY/mpfAKPocJ+twI9tAv\n" +
+                        "FzFY+ymehclMMt8+SJ4MLMnvK0FGptlNEb0Wse+JKamNMhgUW1iuBHDXZqDfsF5P\n" +
+                        "b3HJxR7qsBqeVSUaHS0dPnb4to/qV4ShCwdNWYECgYBRWSojEWEAuTYZ/jBkyHIR\n" +
+                        "DueDVXNQWmWoP3MHEVBInvKy/13xdiBmfeIzRvfmTg329tTgxo7m8MGyr2iK8Zjs\n" +
+                        "HCXpxBVpg54q7F2BR4GmNkQFnT9xbh/HzMCUDiXwW5aasAAPVosOOkIO/rZKwxhm\n" +
+                        "K6ZenqU8eOFWYiQ8UrRxsA==\n" +
+                        "-----END PRIVATE KEY-----");
 
         return new PartnerConfiguration(partnerConfigurationMap, sensitiveConfigurationMap);
     }

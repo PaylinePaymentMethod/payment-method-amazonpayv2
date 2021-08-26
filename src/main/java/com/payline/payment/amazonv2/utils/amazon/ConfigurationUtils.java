@@ -26,7 +26,7 @@ public class ConfigurationUtils {
             payConfiguration = new PayConfiguration()
                     .setRegion(Region.EU)
                     .setPublicKeyId(configuration.getContractConfiguration().getProperty(ContractConfigurationKeys.PUBLIC_KEY_ID).getValue())
-                    .setPrivateKey(configuration.getPartnerConfiguration().getProperty(PartnerConfigurationKeys.PRIVATE_KEY))
+                    .setPrivateKey(configuration.getPartnerConfiguration().getProperty(PartnerConfigurationKeys.PRIVATE_KEY).toCharArray())
                     .setEnvironment(configuration.getEnvironment().isSandbox() ? Environment.SANDBOX : Environment.LIVE);
         } catch (AmazonPayClientException e) {
             String errorMessage = "unable to init Amazon configuration";

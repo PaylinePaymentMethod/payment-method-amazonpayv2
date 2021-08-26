@@ -18,8 +18,9 @@ compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.incremental = true  // Pour accélerer la compilation
+    options.incremental = true  // Pour accÃ©lerer la compilation
 }
+
 
 def externalFileName = "$projectDir/.external"
 if (file(externalFileName).exists()) {
@@ -46,8 +47,6 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jupiterVersion
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: jupiterVersion
-    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-server', version: seleniumVersion
-    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-support', version: seleniumVersion
 }
 
 jar {
